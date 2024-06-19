@@ -12,4 +12,3 @@ This project is a Python script that generates certificates with text placed wit
 - Reads data from a CSV file to populate text onto the image.
 - Dynamically adjusts text size based on the size of the selected rectangles.
 
-

@@ -44,13 +44,36 @@ def take_coordinates(s):
 def write_text_on_image(img, text, coordinates):
     for (x, y, w, h) in coordinates:
         font_scale = min(w / 200, h / 50)
-        thickness = 2
+        thickness = 1
         text_size, _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)
         text_position = (x + (w - text_size[0]) // 2, y + (h + text_size[1]) // 2)
-        cv2.putText(img, text, text_position, cv2.FONT_ITALIC, font_scale, (0, 0, 0), thickness)
+        border_color = (0, 0, 0)
+        cv2.putText(img, text, text_position, cv2.FONT_ITALIC, font_scale,border_color, thickness, cv2.LINE_AA)
 
 img_path = 'aa.png'
 img = cv2.imread(img_path)
+
+window_width = 1000
+window_height = 800
+
+original_height, original_width = img.shape[:2]
+
+aspect_ratio = original_width / original_height
+
+if original_width > original_height:
+    new_width = window_width
+    new_height = int(window_width / aspect_ratio)
+else:
+    new_height = window_height
+    new_width = int(window_height * aspect_ratio) 
+
+if new_width < original_width or new_height < original_height:
+    interpolation = cv2.INTER_AREA
+else:
+    interpolation = cv2.INTER_CUBIC
+
+# Resize the image
+img= cv2.resize(img, (new_width, new_height), interpolation=interpolation)
 main_copy = img.copy()
 if img is None:
     print("Error loading image")
